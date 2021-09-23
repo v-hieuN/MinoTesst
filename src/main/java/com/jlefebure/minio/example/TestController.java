@@ -3,6 +3,7 @@ package com.jlefebure.minio.example;
 import com.google.api.client.util.IOUtils;
 import com.jlefebure.spring.boot.minio.MinioException;
 import com.jlefebure.spring.boot.minio.MinioService;
+import io.minio.MinioClient;
 import io.minio.messages.Item;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
@@ -41,14 +42,18 @@ public class TestController {
 
         // Copy the stream to the response's output stream.
         IOUtils.copy(inputStream, response.getOutputStream());
+
         response.flushBuffer();
+//        MinioClient minioClient = MinioClient.class
     }
 
     @PostMapping
     public void addAttachement(@RequestParam("file") MultipartFile file) {
+
+        //APi này đang lỗi
         Path path = Path.of(file.getOriginalFilename());
         Map<String, String> header = new HashMap<>();
-        header.put("X-Incident-Id", "C918371984");
+        header.put("X-Incident-Id",     "C918371984");
         try {
             minioService.upload(path, file.getInputStream(), file.getContentType(), header);
         } catch (MinioException e) {
